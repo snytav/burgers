@@ -81,7 +81,20 @@ def burgers_time_viscous ( e_num, nu ):
 #
 #  Set U and U0 by interpolation.
 #
+# TO u
+#u.vector().set_local(np.zeros(32))
+# coordinates
+# crd=np.array(mesh.coordinates())
+  plot(u)
+  plt.savefig('u.png')
+  plt.close()
+  plot(u_init)
+  plt.savefig('u_init_before.png',mesh=mesh)
+  plt.close()
   u.interpolate ( u_init )
+  plot(u_init)
+  plt.savefig('u_init_after.png')
+  plt.close()
   u_old.assign ( u )
 #
 #  Set the time step.

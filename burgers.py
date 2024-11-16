@@ -85,15 +85,19 @@ def burgers_time_viscous ( e_num, nu ):
 #u.vector().set_local(np.zeros(32))
 # coordinates
 # crd=np.array(mesh.coordinates())
+  import numpy as np
+  #array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   plot(u)
   plt.savefig('u.png')
   plt.close()
-  plot(u_init)
+  plot(u_init,mesh=mesh)
   plt.savefig('u_init_before.png',mesh=mesh)
+  u.vector()[:] = np.ones(33)
   plt.close()
   u.interpolate ( u_init )
   plot(u_init)
   plt.savefig('u_init_after.png')
+  u_vec=u.vector().get_local()
   plt.close()
   u_old.assign ( u )
 #

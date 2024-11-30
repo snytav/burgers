@@ -97,7 +97,7 @@ def burgers_time_viscous ( e_num, nu ):
   plt.close()
   u.interpolate ( u_init )
   from IC_lorenaBarba import IC
-  u.vector()[:] = IC(u.vector().get_local().shape) #replacing IC by what we need
+  #u.vector()[:] = IC(u.vector().get_local().shape) #replacing IC by what we need
   plot(u_init,mesh=mesh)
   plt.savefig('u_init_after.png')
   u_vec=u.vector().get_local()
@@ -143,7 +143,7 @@ def burgers_time_viscous ( e_num, nu ):
 
   while ( True ):
 
-    if ( k % 10 == 0 ):
+    if ( k % 1 == 0 ):
       plot ( u, title = ( 'burgers time viscous %g' % ( t ) ) )
       plt.grid ( True )
       filename = ( 'burgers_time_viscous_%d.png' % ( k ) )

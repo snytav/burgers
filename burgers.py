@@ -97,7 +97,7 @@ def burgers_time_viscous ( e_num, nu ):
   u.interpolate ( u_init )
   from IC_lorenaBarba import IC
   u.vector()[:] = IC(u.vector().get_local().shape) #replacing IC by what we need
-  plot(u_init)
+  plot(u_init,mesh=mesh)
   plt.savefig('u_init_after.png')
   u_vec=u.vector().get_local()
   plt.close()
@@ -160,6 +160,11 @@ def burgers_time_viscous ( e_num, nu ):
     t = t + dt
 
     solve ( F == 0, u, bc, J = J )
+
+    f = plt.figure()
+    plt.plot(u.vector().get_local())
+    plt.savefig("u_"+str(t)+'.png')
+    plt.close(f)
 
     u_old.assign ( u )
 

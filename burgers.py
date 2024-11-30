@@ -57,12 +57,13 @@ def burgers_time_viscous ( e_num, nu ):
 #  if X <= XLEFT + eps, then U = U_LEFT
 #  if X_RIGHT - eps <= X, then U = U_RIGHT
 #
-  u_left = -1.0
+  u_left  = -1.0
+  u_right = +1.0
   def on_left ( x, on_boundary ):
     return ( on_boundary and near ( x[0], x_left ) )
   bc_left = DirichletBC ( V, u_left, on_left )
 
-  u_right = +1.0
+  #u_right = +1.0
   def on_right ( x, on_boundary ):
     return ( on_boundary and near ( x[0], x_right ) )
   bc_right = DirichletBC ( V, u_right, on_right )
@@ -158,7 +159,8 @@ def burgers_time_viscous ( e_num, nu ):
 
     k = k + 1
     t = t + dt
-
+    from periodic import get_periodic_BC
+    bc = get_periodic_BC(u,V,on_left,on_right)
     solve ( F == 0, u, bc, J = J )
 
     f = plt.figure()

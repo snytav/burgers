@@ -91,10 +91,11 @@ def burgers_time_viscous ( e_num, nu ):
   plt.savefig('u.png')
   plt.close()
   plot(u_init,mesh=mesh)
-  plt.savefig('u_init_before.png',mesh=mesh)
+  plt.savefig('u_init_before.png')#,mesh=mesh)
   u.vector()[:] = np.ones(33)
   plt.close()
   u.interpolate ( u_init )
+  u.vector()[:] = np.ones(33) #replacing IC by what we need
   plot(u_init)
   plt.savefig('u_init_after.png')
   u_vec=u.vector().get_local()

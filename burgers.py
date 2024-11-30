@@ -92,10 +92,11 @@ def burgers_time_viscous ( e_num, nu ):
   plt.close()
   plot(u_init,mesh=mesh)
   plt.savefig('u_init_before.png')#,mesh=mesh)
-  u.vector()[:] = np.ones(33)
+  # u.vector()[:] = np.ones(33)
   plt.close()
   u.interpolate ( u_init )
-  u.vector()[:] = np.ones(33) #replacing IC by what we need
+  from IC_lorenaBarba import IC
+  u.vector()[:] = IC(u.vector().get_local().shape) #replacing IC by what we need
   plot(u_init)
   plt.savefig('u_init_after.png')
   u_vec=u.vector().get_local()
@@ -199,8 +200,8 @@ def burgers_time_viscous_test ( ):
   print ( '  FENICS version %s'% ( dolfin.__version__ ) )
   print ( '  Solve the time-dependent 1d viscous Burgers equation.' )
 
-  e_num = 32
-  nu = 0.05
+  e_num = 101
+  nu = 0.07
   burgers_time_viscous ( e_num, nu )
 #
 #  Terminate.

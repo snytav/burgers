@@ -1,5 +1,8 @@
 from dolfin import *
 
+#TODO periodic
+# https://oldqa.fenicsproject.org/8682/periodic-boundary-conditions-for-dg/
+
 def get_periodic_BC(u0,V,on_left,on_right):
     u = u0.vector().get_local()
     bc_left = DirichletBC(V, u[-2], on_left)

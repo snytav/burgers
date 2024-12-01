@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #
-from dolfin import *
+from fenics import *
 
 def burgers_time_viscous ( e_num, nu ):
 
@@ -19,7 +19,7 @@ def burgers_time_viscous ( e_num, nu ):
 #
 #  Licensing:
 #
-#    This code is distributed under the MIT license.
+#    This code is distributed under the GNU LGPL license.
 #
 #  Modified:
 #
@@ -57,13 +57,12 @@ def burgers_time_viscous ( e_num, nu ):
 #  if X <= XLEFT + eps, then U = U_LEFT
 #  if X_RIGHT - eps <= X, then U = U_RIGHT
 #
-  u_left  = -1.0
-  u_right = +1.0
+  u_left = -1.0
   def on_left ( x, on_boundary ):
     return ( on_boundary and near ( x[0], x_left ) )
   bc_left = DirichletBC ( V, u_left, on_left )
 
-  #u_right = +1.0
+  u_right = +1.0
   def on_right ( x, on_boundary ):
     return ( on_boundary and near ( x[0], x_right ) )
   bc_right = DirichletBC ( V, u_right, on_right )
@@ -82,26 +81,7 @@ def burgers_time_viscous ( e_num, nu ):
 #
 #  Set U and U0 by interpolation.
 #
-# TO u
-#u.vector().set_local(np.zeros(32))
-# coordinates
-# crd=np.array(mesh.coordinates())
-  import numpy as np
-  #array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-  plot(u)
-  plt.savefig('u.png')
-  plt.close()
-  plot(u_init,mesh=mesh)
-  plt.savefig('u_init_before.png')#,mesh=mesh)
-  # u.vector()[:] = np.ones(33)
-  plt.close()
   u.interpolate ( u_init )
-  from IC_lorenaBarba import IC
-  u.vector()[:] = IC(u.vector().get_local().shape) #replacing IC by what we need
-  plot(u_init,mesh=mesh)
-  plt.savefig('u_init_after.png')
-  u_vec=u.vector().get_local()
-  plt.close()
   u_old.assign ( u )
 #
 #  Set the time step.
@@ -143,7 +123,7 @@ def burgers_time_viscous ( e_num, nu ):
 
   while ( True ):
 
-    if ( k % 1 == 0 ):
+    if ( k % 10 == 0 ):
       plot ( u, title = ( 'burgers time viscous %g' % ( t ) ) )
       plt.grid ( True )
       filename = ( 'burgers_time_viscous_%d.png' % ( k ) )
@@ -159,14 +139,8 @@ def burgers_time_viscous ( e_num, nu ):
 
     k = k + 1
     t = t + dt
-    from periodic import get_periodic_BC
-    bc = get_periodic_BC(u,V,on_left,on_right)
-    solve ( F == 0, u, bc, J = J )
 
-    f = plt.figure()
-    plt.plot(u.vector().get_local())
-    plt.savefig("u_"+str(t)+'.png')
-    plt.close(f)
+    solve ( F == 0, u, bc, J = J )
 
     u_old.assign ( u )
 
@@ -180,7 +154,7 @@ def burgers_time_viscous_test ( ):
 #
 #  Licensing:
 #
-#    This code is distributed under the MIT license.
+#    This code is distributed under the GNU LGPL license.
 #
 #  Modified:
 #
@@ -190,8 +164,6 @@ def burgers_time_viscous_test ( ):
 #
 #    John Burkardt
 #
-  import dolfin
-  import platform
   import time
 
   print ( time.ctime ( time.time() ) )
@@ -203,12 +175,11 @@ def burgers_time_viscous_test ( ):
 
   print ( '' )
   print ( 'burgers_time_viscous_test:' )
-  print ( '  Python version: %s' % ( platform.python_version ( ) ) )
-  print ( '  FENICS version %s'% ( dolfin.__version__ ) )
+  print ( '  FENICS/Python version' )
   print ( '  Solve the time-dependent 1d viscous Burgers equation.' )
 
-  e_num = 101
-  nu = 0.07
+  e_num = 32
+  nu = 0.05
   burgers_time_viscous ( e_num, nu )
 #
 #  Terminate.
@@ -223,3 +194,4 @@ def burgers_time_viscous_test ( ):
 if ( __name__ == '__main__' ):
 
   burgers_time_viscous_test ( )
+

@@ -3,9 +3,8 @@ from dolfin import *
 #TODO periodic
 # https://oldqa.fenicsproject.org/8682/periodic-boundary-conditions-for-dg/
 
-def get_periodic_BC(u0,V,on_left,on_right):
-    u = u0.vector().get_local()
-    bc_left = DirichletBC(V, u[-2], on_left)
-    bc_right = DirichletBC(V, u[1], on_right)
-    bc = [bc_left, bc_right]
-    return bc
+class PeriodicBoundary(SubDomain):
+    def inside(self, x, on_boundary):
+        return bool(x[0] < DOLFIN_EPS and x[0] > -DOLFIN_EPS and on_boundary)
+    def map(self, x, y):
+        y[0] = x[0] - 1.0

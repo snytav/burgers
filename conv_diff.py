@@ -13,8 +13,9 @@ def burgers_time_viscous ( e_num, nu ):
 ## burgers_time_viscous, 1D time-dependent viscous Burgers equation.
 #
 #  Discussion:
-#
-#    dudt - nu u" + u del u = 0,
+#    - ux - mu uxx = f in Omega = the unit interval.
+#    dudt - nu u" + v del u = 0,
+#    here v -is convection velocity
 #    -1 < x < 1, 0 < t
 #    u(-1,t) = -1, u(1,t) = 1
 #    u(x,0) = x
@@ -79,7 +80,11 @@ def burgers_time_viscous ( e_num, nu ):
 #
 #  Define the trial functions (u) and test functions (v).
 #
+  import numpy as np
   u = Function ( V )
+  c = Function ( V )        #  convection velocity
+  с0 = 1.0
+  c.vector()[:] = np.ones(c.vector().get_local().shape)
   u_old = Function ( V )
   v = TestFunction ( V )
 #
@@ -109,7 +114,8 @@ def burgers_time_viscous ( e_num, nu ):
   ( \
     dot ( u - u_old, v ) / DT \
   + nu * inner ( grad ( u ), grad ( v ) ) \
-  + inner ( u * u.dx(0), v ) \
+  + inner ( c * u.dx(0), v ) \
+    # set convection velocity v at the place of u
   - dot ( f, v ) \
   ) * dx
 #

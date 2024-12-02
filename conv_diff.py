@@ -76,7 +76,7 @@ def burgers_time_viscous ( e_num, nu ):
 #
 #  Define the initial condition.
 #
-  u_init = Expression ( "x[0]", degree = 1 )
+  u_init = Expression ( "-(x[0]-0.5)*(x[0]-0.5)", degree = 1 )
 #
 #  Define the trial functions (u) and test functions (v).
 #
@@ -189,7 +189,7 @@ def burgers_time_viscous_test ( ):
   print ( '  Solve the time-dependent 1d viscous Burgers equation.' )
 
   e_num = 32
-  nu = 0.05
+  nu = 0.0 # no diffusion to start with
   burgers_time_viscous ( e_num, nu )
 #
 #  Terminate.
